@@ -26,25 +26,25 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
     fun register(){
-        if (edt_nama.text.isEmpty()) {
-            edt_nama.error = "Kolom Nama tidak boleh kosong"
-            edt_nama.requestFocus()
+        if (et_username.text.isEmpty()) {
+            et_username.error = "Kolom Nama tidak boleh kosong"
+            et_username.requestFocus()
             return
-        } else if (edt_email.text.isEmpty()) {
-            edt_email.error = "Kolom Email tidak boleh kosong"
-            edt_email.requestFocus()
+        } else if (et_email.text.isEmpty()) {
+            et_email.error = "Kolom Email tidak boleh kosong"
+            et_email.requestFocus()
             return
-        }else if(edt_phone.text.isEmpty()){
-            edt_phone.error = "Kolom  Phone tidak boleh kosong"
+        }else if(et_phone.text.isEmpty()){
+            et_phone.error = "Kolom  Phone tidak boleh kosong"
             return
         }
-        else if (edt_password.text.isEmpty()) {
-            edt_password.error = "Kolom Password tidak boleh kosong"
-            edt_password.requestFocus()
+        else if (et_password.text.isEmpty()) {
+            et_password.error = "Kolom Password tidak boleh kosong"
+            et_password.requestFocus()
             return
         }
         pb.visibility = View.VISIBLE
-        ApiConfig.instanceRetrofit.register(edt_nama.text.toString(),edt_email.text.toString(),edt_phone.text.toString(),edt_password.text.toString()).enqueue(object : Callback<ResponModel>{
+        ApiConfig.instanceRetrofit.register(et_username.text.toString(),et_email.text.toString(),et_phone.text.toString(),et_password.text.toString()).enqueue(object : Callback<ResponModel>{
             override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
                 pb.visibility = View.VISIBLE
                 val respon = response.body()!!

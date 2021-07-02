@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import yayang.setiyawan.toko.activity.MasukActivity
+import yayang.setiyawan.toko.activity.LoginActivity
 import yayang.setiyawan.toko.fragment.AkunFragment
 import yayang.setiyawan.toko.fragment.HomeFragment
 import yayang.setiyawan.toko.fragment.KeranjangFragment
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                     if (s.getStatusLogin()) {
                         callFragment(2, fragmentAkun)
                     } else {
-                        startActivity(Intent(this, MasukActivity::class.java))
+                        startActivity(Intent(this, LoginActivity::class.java))
                     }
                 }
             }

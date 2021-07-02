@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,29 +40,27 @@ class DetailProdukActivity : AppCompatActivity() {
     fun mainButton(){
         btn_keranjang.setOnClickListener {
             val data = myDb.daoKeranjang().getProduk(produk.id)
-            if (data == null){
+            if (data == null) {
                 insert()
-            }else{
+            } else {
                 data.jumlah += 1
                 update(data)
             }
         }
-        btn_favorit.setOnClickListener {
-            val listData = myDb.daoKeranjang().getAll() // get All data
-            for (note: Produk in listData) {
-                println("-----------------------")
-                println(note.name)
-                println(note.harga)
-            }
-        }
+//        btn_favorit.setOnClickListener {
+//            val listData = myDb.daoKeranjang().getAll() // get All data
+//            for (note: Produk in listData) {
+//                println("-----------------------")
+//                println(note.name)
+//                println(note.harga)
+//            }
+//        }
         btn_toKeranjang.setOnClickListener {
             val intent = Intent("event:keranjang")
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
             onBackPressed()
         }
     }
-
-
     private fun insert(){
         CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().insert(produk) }
                 .subscribeOn(Schedulers.computation())
@@ -69,7 +68,10 @@ class DetailProdukActivity : AppCompatActivity() {
                 .subscribe {
                     checkKeranjang()
                     Log.d("respons", "data inserted")
-                    Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
+                    SweetAlertDialog(this,SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("keranjang")
+                            .setContentText("Di Tambah Ke Keranjang")
+                            .show()
                 }
         )
     }
@@ -80,7 +82,7 @@ class DetailProdukActivity : AppCompatActivity() {
                 .subscribe {
                     checkKeranjang()
                     Log.d("respons", "data inserted")
-                    Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show(
                 })
     }
     private fun checkKeranjang() {

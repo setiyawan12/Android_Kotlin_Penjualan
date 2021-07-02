@@ -16,8 +16,9 @@ import yayang.setiyawan.toko.helper.Helper
 import yayang.setiyawan.toko.model.Alamat
 import yayang.setiyawan.toko.model.Transaksi
 
-class AdapterRiwayat(var data:ArrayList<Transaksi>, var listener:Listeners):RecyclerView.Adapter<AdapterRiwayat.Holder>() {
-    class Holder(view: View):RecyclerView.ViewHolder(view){
+class AdapterRiwayat(var data: ArrayList<Transaksi>, var listener: Listeners) : RecyclerView.Adapter<AdapterRiwayat.Holder>() {
+
+    class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val tvNama = view.findViewById<TextView>(R.id.tv_nama)
         val tvHarga = view.findViewById<TextView>(R.id.tv_harga)
         val tvTangal = view.findViewById<TextView>(R.id.tv_tgl)
@@ -26,15 +27,22 @@ class AdapterRiwayat(var data:ArrayList<Transaksi>, var listener:Listeners):Recy
         val btnDetail = view.findViewById<TextView>(R.id.btn_detail)
         val layout = view.findViewById<CardView>(R.id.layout)
     }
+
     lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         context = parent.context
-        val view :View = LayoutInflater.from(parent.context).inflate(R.layout.item_riwayat,parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_riwayat, parent, false)
         return Holder(view)
     }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: Holder, position: Int) {
+
         val a = data[position]
 
         val name = a.details[0].produk.name
@@ -58,10 +66,9 @@ class AdapterRiwayat(var data:ArrayList<Transaksi>, var listener:Listeners):Recy
             listener.onClicked(a)
         }
     }
-    override fun getItemCount(): Int {
-        return data.size
-    }
+
     interface Listeners {
         fun onClicked(data: Transaksi)
     }
+
 }

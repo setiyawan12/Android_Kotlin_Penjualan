@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,16 +52,16 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<ResponModel>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
 
         })
     }
     fun displayProduk(){
         val arrSlider = ArrayList<Int>()
-        arrSlider.add(R.drawable.slider1)
-        arrSlider.add(R.drawable.slider2)
-        arrSlider.add(R.drawable.slider3)
+        arrSlider.add(R.drawable.book1)
+        arrSlider.add(R.drawable.book2)
+        arrSlider.add(R.drawable.book3)
         val adapterSlider = AdapterSlider(arrSlider,activity)
         vpSlider.adapter = adapterSlider
 
@@ -67,24 +69,17 @@ class HomeFragment : Fragment() {
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         val layoutManager1 = LinearLayoutManager(activity)
         layoutManager1.orientation = LinearLayoutManager.HORIZONTAL
-        val layoutManager2 = LinearLayoutManager(activity)
-        layoutManager2.orientation = LinearLayoutManager.HORIZONTAL
-
 
         rvProduk.adapter = AdapterProduk(requireActivity(),listProduk)
         rvProduk.layoutManager= layoutManager
 
         rvProdukTerlasir.adapter = AdapterProduk(requireActivity(),listProduk)
         rvProdukTerlasir.layoutManager = layoutManager1
-
-        rvElektronik.adapter = AdapterProduk(requireActivity(),listProduk)
-        rvElektronik.layoutManager = layoutManager2
     }
 
     fun init (view: View){
         vpSlider = view.findViewById(R.id.vp_slider)
         rvProduk = view.findViewById(R.id.rv_produk)
-        rvElektronik = view.findViewById(R.id.rvelektronik)
         rvProdukTerlasir=view.findViewById(R.id.rvprodukTerlasir)
     }
 //    override fun onResume() {

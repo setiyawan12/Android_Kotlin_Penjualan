@@ -24,11 +24,14 @@ class LoginActivity : AppCompatActivity() {
         btn_login.setOnClickListener {
          login()
         }
+        btn_register.setOnClickListener {
+            startActivity(Intent(this,RegisterActivity::class.java))
+        }
     }
     fun login() {
-        if (edt_email.text.isEmpty()) {
-            edt_email.error = "Kolom Email tidak boleh kosong"
-            edt_email.requestFocus()
+        if (et_email.text.isEmpty()) {
+            et_email.error = "Kolom Email tidak boleh kosong"
+            et_email.requestFocus()
             return
         } else if (edt_password.text.isEmpty()) {
             edt_password.error = "Kolom Password tidak boleh kosong"
@@ -37,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         pb.visibility = View.VISIBLE
-        ApiConfig.instanceRetrofit.login(edt_email.text.toString(), edt_password.text.toString()).enqueue(object : Callback<ResponModel> {
+        ApiConfig.instanceRetrofit.login(et_email.text.toString(), edt_password.text.toString()).enqueue(object : Callback<ResponModel> {
             override fun onFailure(call: Call<ResponModel>, t: Throwable) {
                 pb.visibility = View.GONE
                 Toast.makeText(this@LoginActivity, "Error:" + t.message, Toast.LENGTH_SHORT).show()
@@ -49,10 +52,6 @@ class LoginActivity : AppCompatActivity() {
                 if (respon.success == 1) {
                     s.setStatusLogin(true)
                     s.setUser(respon.user)
-//                    s.setString(s.nama, respon.user.name)
-//                    s.setString(s.phone, respon.user.phone)
-//                    s.setString(s.email, respon.user.email)
-
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import yayang.setiyawan.toko.R
-import yayang.setiyawan.toko.activity.MasukActivity
+import yayang.setiyawan.toko.activity.LoginActivity
 import yayang.setiyawan.toko.activity.PengirimanActivity
 import yayang.setiyawan.toko.adapter.AdapterKeranjang
 import yayang.setiyawan.toko.helper.Helper
@@ -102,7 +102,7 @@ class KeranjangFragment : Fragment() {
                     Toast.makeText(requireContext(), "Tidak ada produk yg terpilih", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                requireActivity().startActivity(Intent(requireActivity(), MasukActivity::class.java))
+                requireActivity().startActivity(Intent(requireActivity(), LoginActivity::class.java))
             }
         }
 
@@ -139,7 +139,6 @@ class KeranjangFragment : Fragment() {
         btnBayar = view.findViewById(R.id.btn_bayar)
         cbAll = view.findViewById(R.id.cb_all)
     }
-
     override fun onResume() {
         displayProduk()
         hitungTotal()

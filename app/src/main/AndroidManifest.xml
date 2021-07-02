@@ -11,23 +11,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TOKO">
-        <activity android:name=".activity.RiwayatActivity"></activity>
-        <activity android:name=".activity.SuccesActivity" />
-        <activity android:name=".activity.TambahAlamatActivity" />
-        <activity android:name=".activity.ListAlamatActivity" />
-        <activity android:name=".activity.PengirimanActivity" />
-        <activity android:name=".activity.PembayaranActivity" />
-        <activity android:name=".activity.MasukActivity" />
-        <activity android:name=".activity.DetailProdukActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".MainActivity">
+        android:theme="@style/Theme.TOKO"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.DetailTransaksiActivity" />
+        <activity android:name=".activity.RiwayatActivity" />
+        <activity android:name=".activity.SuccesActivity" />
+        <activity android:name=".activity.TambahAlamatActivity" />
+        <activity android:name=".activity.ListAlamatActivity" />
+        <activity android:name=".activity.PengirimanActivity" />
+        <activity android:name=".activity.PembayaranActivity" />
+        <activity android:name=".activity.DetailProdukActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".MainActivity"/>
         <activity android:name=".activity.RegisterActivity" />
     </application>
 

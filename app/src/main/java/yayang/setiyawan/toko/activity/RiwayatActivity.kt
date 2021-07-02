@@ -1,8 +1,10 @@
 package yayang.setiyawan.toko.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_riwayat.*
 import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
@@ -17,39 +19,39 @@ import yayang.setiyawan.toko.model.ResponModel
 import yayang.setiyawan.toko.model.Transaksi
 
 class RiwayatActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_riwayat)
         Helper().setToolbar(this, toolbar, "Riwayat Belanja")
-
     }
 
-    fun getRiwayat(){
+    fun getRiwayat() {
         val id = SharedPref(this).getUser()!!.id
-        ApiConfig.instanceRetrofit.getRiwayat(id).enqueue(object : Callback<ResponModel>{
+        ApiConfig.instanceRetrofit.getRiwayat(id).enqueue(object : Callback<ResponModel> {
+            override fun onFailure(call: Call<ResponModel>, t: Throwable) {
+
+            }
             override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
                 val res = response.body()!!
-                if (res.success == 1){
+                if (res.success == 1) {
                     displayRiwayat(res.transaksis)
                 }
             }
-
-            override fun onFailure(call: Call<ResponModel>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
         })
     }
 
-    fun displayRiwayat(transaksis: ArrayList<Transaksi>){
+    fun displayRiwayat(transaksis: ArrayList<Transaksi>) {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 
-        rv_riwayat.adapter = AdapterRiwayat(transaksis,object :AdapterRiwayat.Listeners{
+        rv_riwayat.adapter = AdapterRiwayat(transaksis, object : AdapterRiwayat.Listeners {
             override fun onClicked(data: Transaksi) {
-                TODO("Not yet implemented")
+                val json = Gson().toJson(data, Transaksi::class.java)
+                val intent = Intent(this@RiwayatActivity, DetailTransaksiActivity::class.java)
+                intent.putExtra("transaksi", json)
+                startActivity(intent)
             }
-
         })
         rv_riwayat.layoutManager = layoutManager
     }
@@ -58,6 +60,7 @@ class RiwayatActivity : AppCompatActivity() {
         getRiwayat()
         super.onResume()
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()

@@ -27,27 +27,21 @@ import yayang.setiyawan.toko.room.MyDatabase
 import yayang.setiyawan.toko.util.ApiKey
 
 class PengirimanActivity : AppCompatActivity() {
-    lateinit var myDb:MyDatabase
-    private var totalHarga =0
+
+    lateinit var myDb: MyDatabase
+    var totalHarga = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pengiriman)
         Helper().setToolbar(this, toolbar, "Pengiriman")
+        myDb = MyDatabase.getInstance(this)!!
+
         totalHarga = Integer.valueOf(intent.getStringExtra("extra")!!)
         tv_totalBelanja.text = Helper().gantiRupiah(totalHarga)
-        myDb = MyDatabase.getInstance(this)!!
         mainButton()
         setSepiner()
     }
 
-    private fun mainButton(){
-        btn_tambahAlamat.setOnClickListener {
-            startActivity(Intent(this,ListAlamatActivity::class.java))
-        }
-        btn_bayar.setOnClickListener {
-            bayar()
-        }
-    }
     fun setSepiner() {
         val arryString = ArrayList<String>()
         arryString.add("JNE")
@@ -69,6 +63,81 @@ class PengirimanActivity : AppCompatActivity() {
             }
         }
     }
+
+    @SuppressLint("SetTextI18n")
+    fun chekAlamat() {
+
+        if (myDb.daoAlamat().getByStatus(true) != null) {
+            div_alamat.visibility = View.VISIBLE
+            div_kosong.visibility = View.GONE
+            div_metodePengiriman.visibility = View.VISIBLE
+
+            val a = myDb.daoAlamat().getByStatus(true)!!
+            tv_nama.text = a.name
+            tv_phone.text = a.phone
+            tv_alamat.text = a.alamat + ", " + a.kota + ", " + a.kodepos + ", (" + a.type + ")"
+            btn_tambahAlamat.text = "Ubah Alamat"
+
+            getOngkir("JNE")
+        } else {
+            div_alamat.visibility = View.GONE
+            div_kosong.visibility = View.VISIBLE
+            btn_tambahAlamat.text = "Tambah Alamat"
+        }
+    }
+
+    private fun mainButton() {
+        btn_tambahAlamat.setOnClickListener {
+            startActivity(Intent(this, ListAlamatActivity::class.java))
+        }
+
+        btn_bayar.setOnClickListener {
+            bayar()
+        }
+    }
+
+    private fun bayar() {
+        val user = SharedPref(this).getUser()!!
+        val a = myDb.daoAlamat().getByStatus(true)!!
+
+        val listProduk = myDb.daoKeranjang().getAll() as ArrayList
+        var totalItem = 0
+        var totalHarga = 0
+        val produks = ArrayList<Chekout.Item>()
+        for (p in listProduk) {
+            if (p.selected) {
+                totalItem += p.jumlah
+                totalHarga += (p.jumlah * Integer.valueOf(p.harga))
+
+                val produk = Chekout.Item()
+                produk.id = "" + p.id
+                produk.total_item = "" + p.jumlah
+                produk.total_harga = "" + (p.jumlah * Integer.valueOf(p.harga))
+                produk.catatan = "catatan baru"
+                produks.add(produk)
+            }
+        }
+
+        val chekout = Chekout()
+        chekout.user_id = "" + user.id
+        chekout.total_item = "" + totalItem
+        chekout.total_harga = "" + totalHarga
+        chekout.name = a.name
+        chekout.phone = a.phone
+        chekout.jasa_pengiriaman = jasaKirim
+        chekout.ongkir = ongkir
+        chekout.kurir = kurir
+        chekout.detail_lokasi = tv_alamat.text.toString()
+        chekout.total_transfer = "" + (totalHarga + Integer.valueOf(ongkir))
+        chekout.produks = produks
+
+        val json = Gson().toJson(chekout, Chekout::class.java)
+        Log.d("Respon:", "jseon:" + json)
+        val intent = Intent(this, PembayaranActivity::class.java)
+        intent.putExtra("extra", json)
+        startActivity(intent)
+    }
+
     private fun getOngkir(kurir: String) {
 
         val alamat = myDb.daoAlamat().getByStatus(true)
@@ -99,6 +168,7 @@ class PengirimanActivity : AppCompatActivity() {
 
         })
     }
+
     var ongkir = ""
     var kurir = ""
     var jasaKirim = ""
@@ -139,73 +209,19 @@ class PengirimanActivity : AppCompatActivity() {
         rv_metode.adapter = adapter
         rv_metode.layoutManager = layoutManager
     }
+
     fun setTotal(ongkir: String) {
         tv_ongkir.text = Helper().gantiRupiah(ongkir)
         tv_total.text = Helper().gantiRupiah(Integer.valueOf(ongkir) + totalHarga)
     }
 
-    @SuppressLint("SetTextI18n")
-    fun chekAlamat() {
-
-        if (myDb.daoAlamat().getByStatus(true) != null) {
-            div_alamat.visibility = View.VISIBLE
-            div_kosong.visibility = View.GONE
-            div_metodePengiriman.visibility = View.VISIBLE
-
-            val a = myDb.daoAlamat().getByStatus(true)!!
-            tv_nama.text = a.name
-            tv_phone.text = a.phone
-            tv_alamat.text = a.alamat + ", " + a.kota + ", " + a.kodepos + ", (" + a.type + ")"
-            btn_tambahAlamat.text = "Ubah Alamat"
-        } else {
-            div_alamat.visibility = View.GONE
-            div_kosong.visibility = View.VISIBLE
-            btn_tambahAlamat.text = "Tambah Alamat"
-        }
-    }
-    private fun bayar(){
-        val user = SharedPref(this).getUser()!!
-        val a = myDb.daoAlamat().getByStatus(true)!!
-        val listProduk = myDb.daoKeranjang().getAll() as ArrayList
-        var totalItem = 0
-        var totalHarga = 0
-        val produks = ArrayList<Chekout.Item>()
-        for (p in listProduk){
-            if (p.selected){
-                totalItem +=p.jumlah
-                totalHarga += (p.jumlah*Integer.valueOf(p.harga))
-                val produk = Chekout.Item()
-                produk.id = ""+p.id
-                produk.total_item=""+p.jumlah
-                produk.total_harga=""+(p.jumlah*Integer.valueOf(p.harga))
-                produk.catatan = "My Catatan"
-                produks.add(produk)
-            }
-        }
-
-        val chekout = Chekout()
-        chekout.user_id = "" + user.id
-        chekout.total_item = "" + totalItem
-        chekout.total_harga = "" + totalHarga
-        chekout.name = a.name
-        chekout.phone = a.phone
-        chekout.jasa_pengiriaman = jasaKirim
-        chekout.ongkir = ongkir
-        chekout.kurir = kurir
-        chekout.detail_lokasi = tv_alamat.text.toString()
-        chekout.total_transfer = "" + (totalHarga + Integer.valueOf(ongkir))
-        chekout.produks = produks
-
-        val json = Gson().toJson(chekout, Chekout::class.java)
-        Log.d("Respon:", "jseon:" + json)
-        val intent = Intent(this, PembayaranActivity::class.java)
-        intent.putExtra("extra", json)
-        startActivity(intent)
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     override fun onResume() {
         chekAlamat()
         super.onResume()
     }
-
 }

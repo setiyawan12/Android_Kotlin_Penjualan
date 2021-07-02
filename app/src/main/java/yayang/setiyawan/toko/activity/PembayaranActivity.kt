@@ -30,9 +30,10 @@ class PembayaranActivity : AppCompatActivity() {
     }
     fun displayBank(){
         val arrBank = ArrayList<Bank>()
-        arrBank.add(Bank("BCA", "092093871237", "Tisto wahyudi", R.drawable.logo_bca))
-        arrBank.add(Bank("BRI", "86721349128", "Tisto wahyudi", R.drawable.logo_bri))
-        arrBank.add(Bank("Mandiri", "02394870329", "Tisto wahyudi", R.drawable.logo_madiri))
+        arrBank.add(Bank("BCA", "092093871237", "Yayang Setiyawan", R.drawable.bca))
+        arrBank.add(Bank("BRI", "86721349128", "Yayang Setiyawan", R.drawable.bri))
+        arrBank.add(Bank("Mandiri", "02394870329", "Yayang Setiyawan", R.drawable.mandiri))
+        arrBank.add(Bank("Syariah", "02394870329", "Yayang Setiyawan", R.drawable.syariah))
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         rv_data.layoutManager = layoutManager

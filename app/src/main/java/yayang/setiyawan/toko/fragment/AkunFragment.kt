@@ -44,7 +44,7 @@ class AkunFragment : Fragment() {
         val user = s.getUser()!!
         tvNama.text = user.name
         tvEmail.text = user.email
-        tvPhone.text = user.phone
+//        tvPhone.text = user.phone
     }
     private fun init(view: View){
         btnLogout = view.findViewById(R.id.btn_logout)
