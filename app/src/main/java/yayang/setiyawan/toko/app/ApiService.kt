@@ -13,14 +13,16 @@ interface ApiService {
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("phone") phone:String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("fcm")fcm: String
     ): Call<ResponModel>
 
     @FormUrlEncoded
     @POST("login")
     fun login(
             @Field("email") email: String,
-            @Field("password")password: String
+            @Field("password")password: String,
+            @Field("fcm")fcm: String
     ):Call<ResponModel>
 
     @GET("produk")

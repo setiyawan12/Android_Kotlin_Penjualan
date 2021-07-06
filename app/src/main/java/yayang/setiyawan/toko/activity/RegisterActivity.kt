@@ -3,8 +3,11 @@ package yayang.setiyawan.toko.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,13 +20,28 @@ import yayang.setiyawan.toko.model.ResponModel
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var s:SharedPref
+    lateinit var fcm:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         s = SharedPref(this)
+        getFcm()
         btn_register.setOnClickListener {
             register()
         }
+    }
+    private fun getFcm(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("respon", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            fcm =token.toString()
+            // Log and toast
+            Log.d("respon fcm:", token.toString())
+        })
     }
     fun register(){
         if (et_username.text.isEmpty()) {
@@ -44,7 +62,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
         pb.visibility = View.VISIBLE
-        ApiConfig.instanceRetrofit.register(et_username.text.toString(),et_email.text.toString(),et_phone.text.toString(),et_password.text.toString()).enqueue(object : Callback<ResponModel>{
+        ApiConfig.instanceRetrofit.register(et_username.text.toString(),et_email.text.toString(),et_phone.text.toString(),et_password.text.toString(),fcm).enqueue(object : Callback<ResponModel>{
             override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
                 pb.visibility = View.VISIBLE
                 val respon = response.body()!!
