@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "706320950379",
+    "project_id": "tokobuku-48f41",
+    "storage_bucket": "tokobuku-48f41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706320950379:android:e53cf8968109e6c8d9bd2e",
+        "android_client_info": {
+          "package_name": "yayang.setiyawan.toko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706320950379-u674hssdb80nkhpfg8li5i0863l623u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "yayang.setiyawan.toko",
+            "certificate_hash": "d3000178d7983610d969f9d8f2a0c147789c9283"
+          }
+        },
+        {
+          "client_id": "706320950379-cafvh5vlpuaf072v962njr5s58bnv687.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADORyt-X4Pww1GFcUlxI13NdICSZm-WNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706320950379-cafvh5vlpuaf072v962njr5s58bnv687.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
